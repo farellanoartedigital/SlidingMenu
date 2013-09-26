@@ -1,4 +1,4 @@
-package com.jeremyfeinstein.slidingmenu.lib;
+package com.slidingmenu.lib;
 
 import java.lang.reflect.Method;
 
@@ -25,9 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.jeremyfeinstein.slidingmenu.lib.CustomViewAbove.OnPageChangeListener;
+import com.jeremyfeinstein.slidingmenu.lib.R;
+import com.slidingmenu.lib.CustomViewAbove.OnPageChangeListener;
 
 public class SlidingMenu extends RelativeLayout {
 
@@ -69,11 +71,18 @@ public class SlidingMenu extends RelativeLayout {
 	private CustomViewBehind mViewBehind;
 
 	private OnOpenListener mOpenListener;
-	
-	private OnOpenListener mSecondaryOpenListner;
 
 	private OnCloseListener mCloseListener;
 
+	private BubbleListener mBubbleListener; // Helper to manage the click on the bubble
+	
+	public interface BubbleListener {
+		
+		public void onClick();
+		public boolean shouldOpen();
+	}
+	
+	
 	/**
 	 * The listener interface for receiving onOpen events.
 	 * The class that is interested in processing a onOpen
@@ -214,18 +223,37 @@ public class SlidingMenu extends RelativeLayout {
 		mViewAbove.setOnPageChangeListener(new OnPageChangeListener() {
 			public static final int POSITION_OPEN = 0;
 			public static final int POSITION_CLOSE = 1;
-			public static final int POSITION_SECONDARY_OPEN = 2;
+			
+			ImageView image;
 
 			public void onPageScrolled(int position, float positionOffset,
 					int positionOffsetPixels) { }
 
 			public void onPageSelected(int position) {
 				if (position == POSITION_OPEN && mOpenListener != null) {
+					if (image == null){
+						image = new ImageView(getContext());
+						image.setImageResource(R.drawable.buble_login);
+						image.setClickable(true);
+						LayoutParams params =  new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+						params.setMargins(180, 106, 0, 0);
+						image.setLayoutParams(params);
+						addView(image);
+						image.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								if(mBubbleListener != null)
+									mBubbleListener.onClick();
+							}
+						});
+					}
+					if(mBubbleListener != null && mBubbleListener.shouldOpen())
+						image.setVisibility(View.VISIBLE);
 					mOpenListener.onOpen();
 				} else if (position == POSITION_CLOSE && mCloseListener != null) {
 					mCloseListener.onClose();
-				} else if (position == POSITION_SECONDARY_OPEN && mSecondaryOpenListner != null ) {
-					mSecondaryOpenListner.onOpen();
+					image.setVisibility(View.INVISIBLE);
 				}
 			}
 		});
@@ -280,6 +308,10 @@ public class SlidingMenu extends RelativeLayout {
 		if (selectorRes != -1)
 			setSelectorDrawable(selectorRes);
 		ta.recycle();
+	}
+	
+	public void setOnBubbleClickListener(BubbleListener listener){
+		mBubbleListener = listener;
 	}
 
 	/**
@@ -660,22 +692,6 @@ public class SlidingMenu extends RelativeLayout {
 	public float getBehindScrollScale() {
 		return mViewBehind.getScrollScale();
 	}
-	
-	/**
-	 * Gets the touch mode margin threshold
-	 * @return the touch mode margin threshold
-	 */
-	public int getTouchmodeMarginThreshold() {
-		return mViewBehind.getMarginThreshold();
-	}
-	
-	/**
-	 * Set the touch mode margin threshold
-	 * @param touchmodeMarginThreshold
-	 */
-	public void setTouchmodeMarginThreshold(int touchmodeMarginThreshold) {
-		mViewBehind.setMarginThreshold(touchmodeMarginThreshold);
-	}
 
 	/**
 	 * Sets the behind scroll scale.
@@ -883,19 +899,8 @@ public class SlidingMenu extends RelativeLayout {
 		mOpenListener = listener;
 	}
 
-	
 	/**
-	 * Sets the OnOpenListner for secondary menu  {@link OnOpenListener#onOpen() OnOpenListener.onOpen()} will be called when the secondary SlidingMenu is opened
-	 * 
-	 * @param listener the new OnOpenListener
-	 */
-	
-	public void setSecondaryOnOpenListner(OnOpenListener listener) {
-		mSecondaryOpenListner = listener;
-	}
-	
-	/**
-	 * Sets the OnCloseListener. {@link OnCloseListener#onClose() OnCloseListener.onClose()} will be called when any one of the SlidingMenu is closed
+	 * Sets the OnCloseListener. {@link OnCloseListener#onClose() OnCloseListener.onClose()} will be called when the SlidingMenu is closed
 	 *
 	 * @param listener the new setOnCloseListener
 	 */

@@ -1,29 +1,25 @@
-package com.jeremyfeinstein.slidingmenu.lib.app;
+package com.slidingmenu.lib.app;
 
-import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ListView;
 
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu;
 
-public class SlidingListActivity extends ListActivity implements SlidingActivityBase {
+public class SlidingFragmentActivity extends FragmentActivity implements SlidingActivityBase {
 
 	private SlidingActivityHelper mHelper;
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mHelper = new SlidingActivityHelper(this);
 		mHelper.onCreate(savedInstanceState);
-		ListView listView = new ListView(this);
-		listView.setId(android.R.id.list);
-		setContentView(listView);
 	}
 
 	/* (non-Javadoc)
@@ -47,7 +43,7 @@ public class SlidingListActivity extends ListActivity implements SlidingActivity
 	}
 
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -128,9 +124,8 @@ public class SlidingListActivity extends ListActivity implements SlidingActivity
 	public void showMenu() {
 		mHelper.showMenu();
 	}
-	
-	/*
-	 * (non-Javadoc)
+
+	/* (non-Javadoc)
 	 * @see com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivityBase#showSecondaryMenu()
 	 */
 	public void showSecondaryMenu() {

@@ -1,4 +1,4 @@
-package com.jeremyfeinstein.slidingmenu.lib;
+package com.slidingmenu.lib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +26,8 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenedListener;
-//import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnCloseListener;
-//import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
+import com.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 
 public class CustomViewAbove extends ViewGroup {
 

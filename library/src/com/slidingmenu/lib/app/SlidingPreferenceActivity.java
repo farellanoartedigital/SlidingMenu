@@ -1,6 +1,6 @@
-package com.jeremyfeinstein.slidingmenu.lib.app;
+package com.slidingmenu.lib.app;
 
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.slidingmenu.lib.SlidingMenu;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
